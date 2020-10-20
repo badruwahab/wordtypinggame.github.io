@@ -1,0 +1,278 @@
+<!doctype html>
+<html>
+<head><title>word typing game</title>
+    
+    <style>
+        #container{
+            height:550px;
+            position:relative;
+            width:700px;
+            background-color:purple;
+            margin:auto;
+            border:3px solid blue;
+            border-radius:15px;
+        
+        }
+        #timeremaining{
+            position:absolute;
+            top:0px;
+            right:0px;
+            height:35px;
+            text-align: center;
+            background-color: green;
+            border-radius: 3px;
+            border: 3px solid blue;
+            font-size: 30px; 
+            display:none;
+        }
+        #correct{
+            position:absolute;
+            left:0px;
+            top:0px;
+            background-color: green;
+            font-size: 30px;
+            height:35px;
+            width:120px;
+            text-align: center;
+            border-radius: 3px;
+            border:3px solid blue;
+            display:none;
+        }
+    #wrong{
+            position:absolute;
+            left:0px;
+            top:0px;
+            background-color:red;
+            font-size: 30px;
+            height:35px;
+            width:120px;
+            text-align: center;
+            border-radius: 3px;
+            border:3px solid blue;
+            display:none;
+        }
+        #displayscreen{
+            position: absolute;
+            top:100px;
+            height:250px;
+            width:694px;
+            background-image:linear-gradient(green,white,yellow);
+            color:darkred;
+            font-size: 50px;
+            text-align: center;
+            line-height: 250px;
+            font-family: sans-serif;
+            border:3px solid blue;
+            border-radius: 3px;
+            
+        }
+        #question{
+            position:absolute;
+            top:370px;
+            height:50px;
+            width:500px;
+            color:darkred;
+            font-size: 15px;
+            text-decoration-style: solid
+            
+        }
+        #answer{
+            position:absolute;
+            height:60px;
+            top:383px;
+            width:250px;
+            right:0px;
+            background-color: green;
+            color:darkblue;
+            font-size: 20px;
+            font-style: italic;
+            border:3px solid blue;
+            border-radius: 3px;
+        }
+        #scoredisplay{
+            position:absolute;
+            top:0px;
+            border:3px solid blue;
+            border-radius: 3px;
+            height:35px;
+            background-color:green;
+            left:210px;
+            font-size: 30px;
+            
+                
+
+        }
+         #start{
+            background-color:green;
+            height:40px;
+            width:90px;
+            position:absolute;
+            text-align: center;
+            line-height: 50px;
+            bottom:5px;
+             border:3px solid blue;
+            border-radius: 5px;
+            margin-left: 300px;
+            cursor: pointer;
+        }
+        #endgamedisplay{
+            position: absolute;
+            top:100px;
+            height:250px;
+            width:694px;
+            background-image:linear-gradient(green,white,yellow);
+            color:darkred;
+            font-size: 30px;
+            text-align: center;
+            display :none;
+            font-family: sans-serif;
+            border:3px solid blue;
+            border-radius: 3px;
+        }
+    </style>
+    
+    
+    
+    </head>
+
+
+<body>
+    
+    
+    
+    <div id="container">
+    
+                        <div id="timeremaining">Time remaining:<span id="timerem">0</span></div>
+    
+                         <div id="correct">correct</div>
+                         <div id="wrong">wrong</div>
+                         <div id="displayscreen"></div>
+                         <div id="question"><h1>Enter the word in the screen here</h1></div>
+        <form>
+                         <input type="text" id="answer"/>
+        </form>
+        
+                        <div id="scoredisplay"> Your Score Is:<span id="time"> 0</span></div>
+                        <div><div id="start">Start Game</div></div>
+                        <div id="endgamedisplay"><p>GAME OVER!</p><p>YOUR SCORE IS <span id="scoreafter">0</span>.</p></div>
+    </div>
+    
+   
+    
+    
+    
+    
+    
+
+    
+    <script>
+        var timeleft;
+        var playing=false;
+        var timer;
+        var random_words;
+        //generate random words for the screen
+        
+        function generate_random_words(){
+        var words=['ironic','irregardless','whom','colonel','nonplussed','disinterested','enormity','lieutenant','unabashed','touch','understood','perplexed','negative','positive','coomon','memorable','distinguish','pronounciation','newsletter','languages','uninterested','linguistic','unfortunately','bewildered','unfazed','difficult','switched','bungle','bundle','student','comrade','possibility','inconsistent','computer','commotion','nonstandard','dictionaries','synonyms','without','with','uncommon',]
+        random_words = words[Math.floor(Math.random()*words.length)];
+        document.getElementById("displayscreen").innerText=random_words;
+    
+    }
+        
+        // generate timer
+        
+        function startTimer(){
+            timer=setInterval(function(){
+            --timeleft;
+            show("timeremaining");
+            document.getElementById("timerem").innerText=timeleft;
+                
+                if(timeleft==0){
+                    stoptimer();
+                    show("endgamedisplay");
+                    playing=false;
+                    cleartext();
+                    hide("timeremaining");
+                    document.getElementById("scoreafter").innerText=score;
+                    
+                }
+            },1000);
+        }
+        
+        
+        
+    // generate stoptimer function
+        
+         function stoptimer(){
+        clearInterval(timer);
+    }
+    
+        
+        
+        //generate functions to show and functions to hide
+        
+        //show
+         function  show(id){
+     document.getElementById(id).style.display="block"
+            
+        }
+        //hide
+    function  hide(id){
+     document.getElementById(id).style.display="none"
+            
+        }
+        
+         function  cleartext(){
+        document.getElementById("displayscreen").innerText="";
+        document.getElementById("answer").innerText="";
+    }
+    
+    //adding event to the answer
+        document.getElementById("answer").onkeyup=function(){
+            var t=this.value;
+            if(playing==true){
+        if(t==random_words){
+            show("correct");
+        
+            this.value="";
+            ++score;
+            document.getElementById("time").innerText=score;
+            generate_random_words();
+            setInterval(function(){hide("correct")},1000)
+            
+            
+        }
+               
+        
+        }
+        
+        }
+        
+        
+        //adding event to  the start button
+        document.getElementById("start").onclick=function(){
+            this.innerText="Reset game";
+            if(playing==false){
+                
+                    //start playing
+                playing=true;
+                timeleft=60;
+                score=0;
+                document.getElementById("timerem").innerText=score;
+                startTimer();
+                generate_random_words();
+                }
+            else{
+                location.reload();
+            }
+            
+        }
+        
+        
+ </script>
+   </body>
+
+
+
+
+</html>
